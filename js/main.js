@@ -11,10 +11,12 @@ Available styles
 */
 
 import GEO from "./geoLocation.js";
-//TODO: create your own module that uses navigator.geolocation
-// and import it
 
-console.log(GEO);
+var w = window.innerWidth > 1250 ? 1250 : window.innerWidth;
+var h =
+  window.innerHeight > 850
+    ? window.innerHeight - 380
+    : window.innerHeight - 140;
 
 const APP = {
   baseURL: "https://api.mapbox.com/styles/v1/mapbox",
@@ -24,7 +26,7 @@ const APP = {
   zoom: 10, //matches HTML
   bearing: 0,
   pitch: 60, //matches HTML
-  size: "1000x600",
+  size: `${w}x${h}`,
   token:
     "pk.eyJ1IjoiamFuZ2lyc3VtaXQiLCJhIjoiY2tsbmVwcHM5MGk5czJucXlrMHZ0dGQ2NSJ9.T7lXAWUa6D6H8F9Vt3BqIw",
   init() {
@@ -50,6 +52,27 @@ const APP = {
     img.addEventListener("error", (err) => {
       img.alt = `Failed to load map image. ${err.message}`;
     });
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function (event) {
+      modal.style.display = "none";
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+      event.stopPropagation();
+      event.stopImmidiatePropagation();
+    };
   },
   setZoom(ev) {
     let select = ev.target;
@@ -91,7 +114,10 @@ const APP = {
     img.src = url;
   },
   failure(error) {
-    alert("Oops! something went wrong ", error);
+    let modal = document.getElementById("myModal");
+    let modalText = document.getElementById("modal-text");
+    modalText.innerHTML = "Error! " + error.message;
+    modal.style.display = "block";
   },
 };
 
